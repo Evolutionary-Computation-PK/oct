@@ -4,7 +4,7 @@ OCT (Optical Coherence Tomography) is a non-invasive imaging technique that prov
 The generated images, called B-scans, are cross-sectional views, with each vertical line representing a depth measurement (A-scan). Multiple A-scans are combined to create a 2D representation of the tissue.
 
 ![desc_oct.png](analysis/desc_oct.png)
-Image source: https://eyeguru.org/essentials/interpreting-octs/
+<br>Image source: https://eyeguru.org/essentials/interpreting-octs/
 
 # OCTMNIST
 The **OCTMNIST** dataset is a collection of retinal images obtained using Optical Coherence Tomography (OCT), designed for the task of classification in the context of eye diseases. It consists of OCT scans, each labeled into one of four classes corresponding to different retinal conditions:
@@ -23,6 +23,6 @@ The **OCTMNIST** dataset is a collection of retinal images obtained using Optica
 | 1     | Diabetic macular edema       | 11,598      | 10.61%             |
 | 2     | Drusen                       | 8,866       | 8.11%              |
 | 3     | Normal                       | 51,390      | 47.02%             |
-| **–** | **Łącznie**                  | **109,309** | **100.00%**        |
+| **–** | **Total**                  | **109,309** | **100.00%**        |
 
 ![classes_examples.png](analysis/classes_examples.png)
