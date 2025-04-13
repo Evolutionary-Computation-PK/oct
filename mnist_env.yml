@@ -1,0 +1,21 @@
+name: medmnist-env
+channels:
+  - pytorch
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.12
+  - pytorch
+  - torchvision
+  - torchaudio
+  - numpy
+  - pandas
+  - scikit-learn
+  - pillow
+  - fire
+  - scikit-image
+  - matplotlib
+  - ipykernel
+  - pip
+  - pip:
+      - medmnist
