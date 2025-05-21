@@ -1,0 +1,18 @@
+# Core Python packages
+numpy
+pandas
+scikit-learn
+pillow
+scikit-image
+matplotlib
+opencv-python
+optuna
+tensorboard
+
+# PyTorch ecosystem
+torch
+torchvision
+torchaudio
+
+# MedMNIST package
+medmnist
