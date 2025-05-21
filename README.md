@@ -29,7 +29,9 @@ The **OCTMNIST** dataset is a collection of retinal images obtained using Optica
 
 ## Dataset Source
 https://medmnist.com/ <br>
-https://github.com/MedMNIST/MedMNIST <br>
+code: https://github.com/MedMNIST/MedMNIST <br>
+dataset: https://zenodo.org/records/10519652 <br>
+paper: https://www.nature.com/articles/s41597-022-01721-8 <br>
 
 Jiancheng Yang, Rui Shi, Donglai Wei, Zequan Liu, Lin Zhao, Bilian Ke, Hanspeter Pfister, Bingbing Ni. Yang, Jiancheng, et al. "MedMNIST v2-A large-scale lightweight benchmark for 2D and 3D biomedical image classification." Scientific Data, 2023.
 
