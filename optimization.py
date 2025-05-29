@@ -28,10 +28,10 @@ val_images = np.load('dataset/val_images.npy')
 val_labels = np.load('dataset/val_labels.npy')
 
 # Uncomment for debugging with a smaller dataset
-# train_images = train_images[:1000]
-# train_labels = train_labels[:1000]
-# val_images = val_images[:200]
-# val_labels = val_labels[:200]
+train_images = train_images[:60000]
+train_labels = train_labels[:60000]
+val_images = val_images[:9000]
+val_labels = val_labels[:9000]
 
 # Debug prints
 logger.info(f"Train images shape: {train_images.shape}")
@@ -52,15 +52,15 @@ logger.info(f"Using device: {device}")
 def objective(trial):
     # Hyperparameters
     lr = trial.suggest_float('lr', 1e-5, 1e-2, log=True)
-    batch_size = trial.suggest_categorical('batch_size', [64, 128])
+    batch_size = trial.suggest_categorical('batch_size', [128])
     weight_decay = trial.suggest_float('weight_decay', 1e-6, 1e-2, log=True)
     dropout_rate = trial.suggest_float('dropout_rate', 0.0, 0.7)
     optimizer_name = trial.suggest_categorical('optimizer', ['RMSprop', 'Adam', 'AdamW'])
     num_unfrozen = trial.suggest_int('num_unfrozen', 0, 20)
-    dense_units = trial.suggest_int('dense_units', 32, 512)
+    dense_units = trial.suggest_int('dense_units', 32, 256, step=32)
     gamma = trial.suggest_float('focal_loss_gamma', 1.0, 3.0)
-    feature_extraction_epochs = trial.suggest_int('feature_extraction_epochs', 4, 12)
-    patience = trial.suggest_int('patience', 5, 15)
+    feature_extraction_epochs = trial.suggest_int('feature_extraction_epochs', 4, 8)
+    patience = trial.suggest_int('patience', 5, 10)
 
     logger.info(f"Starting trial {trial.number} with params: lr={lr}, batch_size={batch_size}, "
                 f"weight_decay={weight_decay}, dropout_rate={dropout_rate}, optimizer={optimizer_name}, "
@@ -157,7 +157,7 @@ def main():
     logger.info("Starting Optuna study...")
     # Initialize study
     study = optuna.create_study(
-        study_name='efficientnet_oct_study_all-samples',
+        study_name='efficientnet_oct_study_60000-samples',
         direction='maximize',
         pruner=optuna.pruners.MedianPruner(
             n_startup_trials=N_STARTUP_TRIALS,
