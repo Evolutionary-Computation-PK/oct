@@ -14,6 +14,9 @@ from training.MetricsLogger import MetricsLogger
 from training.utils import get_optimizer, FocalLoss
 from training.logger_config import setup_logger
 
+import logging
+logging.basicConfig(level=logging.INFO)
+
 # Setup logger
 logger = setup_logger('optimization', 'logs/optimization.log')
 
@@ -23,6 +26,12 @@ train_images = np.load('dataset/train_images.npy')
 train_labels = np.load('dataset/train_labels.npy')
 val_images = np.load('dataset/val_images.npy')
 val_labels = np.load('dataset/val_labels.npy')
+
+# Uncomment for debugging with a smaller dataset
+# train_images = train_images[:1000]
+# train_labels = train_labels[:1000]
+# val_images = val_images[:200]
+# val_labels = val_labels[:200]
 
 # Debug prints
 logger.info(f"Train images shape: {train_images.shape}")
@@ -43,7 +52,7 @@ logger.info(f"Using device: {device}")
 def objective(trial):
     # Hyperparameters
     lr = trial.suggest_float('lr', 1e-5, 1e-2, log=True)
-    batch_size = trial.suggest_categorical('batch_size', [16, 32])
+    batch_size = trial.suggest_categorical('batch_size', [64, 128])
     weight_decay = trial.suggest_float('weight_decay', 1e-6, 1e-2, log=True)
     dropout_rate = trial.suggest_float('dropout_rate', 0.0, 0.7)
     optimizer_name = trial.suggest_categorical('optimizer', ['RMSprop', 'Adam', 'AdamW'])
@@ -88,7 +97,7 @@ def objective(trial):
         logger.info("Optimizer and loss function initialized")
 
         # Initialize trainer
-        trainer = ModelTrainer(model, criterion, optimizer, device, metrics_logger)
+        trainer = ModelTrainer(model, criterion, optimizer, device, metrics_logger=metrics_logger)
 
         # Feature extraction phase
         logger.info(
@@ -148,7 +157,7 @@ def main():
     logger.info("Starting Optuna study...")
     # Initialize study
     study = optuna.create_study(
-        study_name='efficientnet_oct_study',
+        study_name='efficientnet_oct_study_all-samples',
         direction='maximize',
         pruner=optuna.pruners.MedianPruner(
             n_startup_trials=N_STARTUP_TRIALS,
@@ -157,6 +166,7 @@ def main():
         ),
         sampler=optuna.samplers.TPESampler(seed=RANDOM_STATE),
         storage='sqlite:///optuna_study_oct.db',
+        load_if_exists=True
     )
 
     # Optimize

@@ -1,19 +1,20 @@
-from medmnist import OCTMNIST
+import torch
 from torch.utils.data import Dataset
+import numpy as np
 
 class OCTDataset(Dataset):
-    def __init__(self, split, transform=None, download=False):
-        self.data = OCTMNIST(split=split, download=download)
-        self.images = self.data.imgs
-        self.labels = self.data.labels.squeeze()
-        self.transform = transform
+    """Dataset for OCT images with preprocessing"""
+
+    def __init__(self, images, labels, preprocessor, is_training=False):
+        self.images = images
+        self.labels = labels.squeeze()  # Squeeze labels to 1D
+        self.preprocessor = preprocessor
+        self.is_training = is_training
 
     def __len__(self):
         return len(self.images)
 
     def __getitem__(self, idx):
-        image = self.images[idx]
-        label = self.labels[idx]
-
-        image = self.transform(image)
-        return image, label
+        img = self.images[idx]
+        processed_img = self.preprocessor.preprocess(img, is_training=self.is_training)
+        return processed_img, self.labels[idx]

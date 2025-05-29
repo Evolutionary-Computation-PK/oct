@@ -20,10 +20,12 @@ def setup_logger(name: str, log_file: str = None, level=logging.INFO):
 
     # Create formatters
     file_formatter = logging.Formatter(
-        '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+        '%(asctime)s.%(msecs)03d - %(name)s - %(levelname)s - %(message)s',
+        datefmt='%Y-%m-%d %H:%M:%S'
     )
     console_formatter = logging.Formatter(
-        '%(asctime)s - %(levelname)s - %(message)s'
+        '%(asctime)s.%(msecs)03d - %(levelname)s - %(message)s',
+        datefmt='%Y-%m-%d %H:%M:%S'
     )
 
     # Create console handler
