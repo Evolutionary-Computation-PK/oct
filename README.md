@@ -68,7 +68,10 @@ TensorBoard logs are saved in the `runs/` directory.
 
 ## Training and Evaluation
 The final training and evaluation of the model are performed using the best hyperparameters obtained from the optimization process. The training is done on the sliced training set (60,000 samples) and validated on the sliced validation set (9,000 samples). The test set (10,000 samples) is used for final evaluation.
-<br><br>
+<br>
+```
+python training.py
+```
 The results of the final training and evaluation are saved in the following structure:
 - `models/model_X/` for model weights
 - `results/model_X/` for individual model results
