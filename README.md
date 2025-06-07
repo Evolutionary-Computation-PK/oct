@@ -72,8 +72,9 @@ The final training and evaluation of the model are performed using the best hype
 The results of the final training and evaluation are saved in the following structure:
 - `models/model_X/` for model weights
 - `results/model_X/` for individual model results
-- `logs/model_X.log` for model-specific logs
 - `results/combined_test_metrics.json` for combined results
+- `logs/model_X.log` for model-specific logs
+- `runs/model_X/` for TensorBoard logs
 
 ## Dataset Source
 https://medmnist.com/ <br>
