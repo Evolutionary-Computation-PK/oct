@@ -2,8 +2,8 @@ import torch
 import torch.nn as nn
 from torchvision import models
 
-from dataset.BatchMixAugmentor import BatchMixAugmentor
-from dataset.DataLoaderFactory import DataLoaderFactory
+from preprocessing.BatchMixAugmentor import BatchMixAugmentor
+from preprocessing.DataLoaderFactory import DataLoaderFactory
 
 
 class Classifier(nn.Module):
@@ -19,6 +19,7 @@ class Classifier(nn.Module):
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         return self.backbone(x)
 
+
 if __name__ == '__main__':
     pre_args = {'image_size': 224, 'apply_blur': False, 'apply_clahe': True}
     aug_args = {'rotation_range': 10, 'zoom_range': 0.2, 'brightness_jitter': 0.1}
@@ -33,9 +34,11 @@ if __name__ == '__main__':
     mix_mode = 'mixup'
     augmentor = BatchMixAugmentor(num_classes=4, mode=mix_mode, alpha=0.4)
 
+
     def soft_cross_entropy(preds, targets):
         log_probs = torch.nn.functional.log_softmax(preds, dim=1)
         return -(targets * log_probs).sum(dim=1).mean()
+
 
     for epoch in range(1, 4):
         model.train()
@@ -55,4 +58,4 @@ if __name__ == '__main__':
             if idx % 10 == 0:
                 print(f"Epoch {epoch}, Batch {idx}/{len(train_loader)}, Loss: {loss.item():.4f}")
 
-        print(f"Epoch {epoch} complete. Avg Loss: {running_loss/len(train_loader):.4f}")
+        print(f"Epoch {epoch} complete. Avg Loss: {running_loss / len(train_loader):.4f}")
