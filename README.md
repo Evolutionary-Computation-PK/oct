@@ -27,6 +27,54 @@ The **OCTMNIST** dataset is a collection of retinal images obtained using Optica
 
 ![classes_examples.png](analysis/classes_examples.png)
 
+## Model
+The model used for the OCTMNIST dataset is a fine-tuned version of the **EfficientNet-V2-s** architecture, which is a convolutional neural network (CNN) designed for image classification tasks. The model is pre-trained on the ImageNet dataset and then adapted to classify OCT images into the four classes mentioned above.
+<br>Hyper-params optimization and final training are performed only on the sliced training (60,000) and validation (9,000) sets, which are subsets of the original dataset. The training set is used for model optimization, while the validation set is used to evaluate the model's performance during final training. The test set is used for evaluation after final training.
+
+## Optimization
+Optimization is performed using only the training set. Cross-validation is used to evaluate the model's performance, with the training set split into 3 folds. The best hyperparameters are selected based on the average `disease recall` across these folds.
+<br>**Focal loss** is used as the loss function to address class imbalance in the dataset. The gamma parameter of the focal loss is optimized as part of the hyperparameter search.
+
+Search for the best hyperparameters using the Optuna framework. The search space includes:
+- **Learning Rate**: A float value between 1e-5 and 1e-2,
+- **Batch Size**: An integer value from the set {128},
+- **Weight Decay**: A float value between 1e-6 and 1e-2,
+- **Dropout Rate**: A float value between 0.0 and 0.7,
+- **Optimizer**: A categorical choice from the set {'RMSprop', 'Adam', 'AdamW'},
+- **Number of Unfrozen Layers**: An integer value between 0 and 20 - the number of layers in the pre-trained model that are unfrozen for training after feature extraction,
+- **Dense Units**: An integer value from the set {32, 64, 96, 128, 160, 192, 224, 256} - the number of units in the dense layer,
+- **Focal Loss Gamma**: A float value between 1.0 and 3.0,
+- **Feature Extraction Epochs**: An integer value between 4 and 8 - the number of epochs for feature extraction,
+- **Patience**: An integer value between 5 and 10 - the number of epochs with no improvement after which training will be stopped.
+
+### Optimization contains
+1. **Data Preparation**: Load and preprocess the OCTMNIST dataset, including normalization and augmentation.
+2. **Model Definition**: Define the EfficientNet-V2-s model with a custom head for classification and frozen layers for feature extraction.
+3. **Prepare the model for training**: 
+   - Compile the model with the specified optimizer, loss function (`focal loss`), and metrics.
+   - Set up callbacks for early stopping and TensorBoard logging.
+4. **Training**: 
+   - Train the model for a specified number of epochs with frozen layers.
+   - Unfreeze the specified number of layers for fine-tuning.
+   - Train the model again with the unfrozen layers.
+   - Evaluate the model on the validation set and calculate the disease recall.
+
+### Run
+```
+python optimization.py
+```
+The results are saved in the Optuna database (`optuna_study_oct.db`), and the best hyperparameters are printed to the console.
+TensorBoard logs are saved in the `runs/` directory.
+
+## Training and Evaluation
+The final training and evaluation of the model are performed using the best hyperparameters obtained from the optimization process. The training is done on the sliced training set (60,000 samples) and validated on the sliced validation set (9,000 samples). The test set (10,000 samples) is used for final evaluation.
+<br><br>
+The results of the final training and evaluation are saved in the following structure:
+- `models/model_X/` for model weights
+- `results/model_X/` for individual model results
+- `logs/model_X.log` for model-specific logs
+- `results/combined_test_metrics.json` for combined results
+
 ## Dataset Source
 https://medmnist.com/ <br>
 code: https://github.com/MedMNIST/MedMNIST <br>
