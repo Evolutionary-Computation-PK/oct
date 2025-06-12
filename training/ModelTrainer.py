@@ -15,19 +15,7 @@ logger = logging.getLogger(__name__)
 class ModelTrainer:
     def __init__(self, model, criterion, optimizer, device, metrics_logger: Optional[MetricsLogger] = None):
         self.device = device
-
-        # Enhanced GPU setup for Linux
-        if platform.system() == 'Linux' and torch.cuda.is_available():
-            gpu_count = torch.cuda.device_count()
-            if gpu_count > 1:
-                logger.info(f"Using {gpu_count} GPUs for training")
-                self.model = torch.nn.DataParallel(model)
-            else:
-                self.model = model
-        else:
-            self.model = model
-
-        self.model = self.model.to(self.device)
+        self.model = model.to(self.device)
         self.criterion = criterion.to(self.device)
         self.optimizer = optimizer
         self.metrics_logger = metrics_logger
