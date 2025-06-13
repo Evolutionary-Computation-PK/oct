@@ -10,7 +10,8 @@ N_STARTUP_TRIALS = 5
 N_WARMUP_STEPS = 3
 INTERVAL_STEPS = 1
 
-BEST_PARAMS = [{
+BEST_PARAMS = [
+{
     'lr': 0.00035045271826099973,
     'batch_size': 128,
     'weight_decay': 0.0006662399361671108,
@@ -45,4 +46,5 @@ BEST_PARAMS = [{
     'focal_loss_gamma': 1.031189599316912,
     'feature_extraction_epochs': 4,
     'patience': 6
-}]
+}
+]
